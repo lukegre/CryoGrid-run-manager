@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
     "cmocean>=4.0.3",
-    "cryogrid-pytools[data,viz]>=0.2.7",
+    "cryogrid-pytools[data,viz]>=0.2.8",
     "dask[dataframe]>=2024.8.0",
     "folium>=0.19.4",
     "h5py>=3.12.1",
