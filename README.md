@@ -18,7 +18,7 @@ Install uv as a package manager for Python (https://docs.astral.sh/uv/getting-st
 4. Install Python dependencies with: `uv sync`
 5. Download CryoGrid (https://github.com/sebastianwestermann/CryoGrid.git) and copy the `source` folder to `CryoGrid-run-manager/src/matlab/`
 
-If you are running MacOS or Linux, you can skip steps 4, 5 and simply run: `make env`
+If you are running MacOS or Linux, you can skip steps 4, 5 and simply run: `make init`
 
 ## Usage
 
