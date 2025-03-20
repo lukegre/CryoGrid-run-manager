@@ -21,3 +21,5 @@ src/matlab/source/
 # other stuff
 runs/*
 notebooks/*.html
+
+!runs/.gitkeep
