@@ -1,0 +1,35 @@
+[project]
+name = "cryogrid_run_manager"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "cmocean>=4.0.3",
+    "cryogrid-pytools[data,viz]>=0.2.7",
+    "dask[dataframe]>=2024.8.0",
+    "folium>=0.19.4",
+    "h5py>=3.12.1",
+    "numba>=0.54.1",
+    "mapclassify>=2.8.1",
+    "matplotlib>=3.9.4",
+    "pygeotile>=1.0.6",
+    "scikit-learn>=1.6.1",
+    "xarray-raster-vector",
+    "xarray-spatial>=0.4.0",
+    "pyzenodo3>=1.0.2",
+]
+
+[project.scripts]
+new-run = "cryogrid_run_manager.cli:create_new_run"
+make-report = "cryogrid_run_manager.cli:create_report"
+
+[tool.uv.sources]
+xarray-raster-vector = { git = "https://github.com/lukegre/xarray-raster-vector.git" }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+packages = ["src/python/cryogrid_run_manager"]

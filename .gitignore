@@ -1,0 +1,23 @@
+# never upload 
+.env
+
+# system caching
+.DS_Store
+
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# CryoGrid source
+src/matlab/source/
+
+# other stuff
+runs/*
+notebooks/*.html
