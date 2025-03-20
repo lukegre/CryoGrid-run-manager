@@ -17,6 +17,12 @@ Install uv as a package manager for Python (https://docs.astral.sh/uv/getting-st
 3. Navigate into the project direcotry: `cd CryoGrid-run-manager`
 4. Install Python dependencies with: `uv sync`
 5. Download CryoGrid (https://github.com/sebastianwestermann/CryoGrid.git) and copy the `source` folder to `CryoGrid-run-manager/src/matlab/`
+6. Create a `.env` file that contains the S3 bucket details for the ERA5 Central Asia data. This file should look like this:
+```
+AWS_ENDPOINT_URL=https://os.zhdk.cloud.switch.ch
+AWS_ACCESS_KEY_ID=your-access-key
+AWS_SECRET_ACCESS_KEY=your-secret-access-key
+```
 
 If you are running MacOS or Linux, you can skip steps 4, 5 and simply run: `make init`
 
