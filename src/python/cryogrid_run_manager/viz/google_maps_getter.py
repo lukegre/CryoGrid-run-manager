@@ -1,19 +1,21 @@
 import numpy as np
+import rioxarray as rxr  # noqa
 import xarray as xr
-import rioxarray as rxr
 from loguru import logger
 from pygeotile.tile import Tile
 
-
-logger.warning("Note that you can only use google_maps_viz for non-commercial visualizations and not for computation and bulk downloads. ")
+logger.warning(
+    "Note that you can only use google_maps_viz for non-commercial "
+    "visualizations and not for computation and bulk downloads. "
+)
 
 
 class GoogleTile(Tile):
-    def __new__(cls, *args, map_layer='s', **kwargs):
+    def __new__(cls, *args, map_layer="s", **kwargs):
         self = super(GoogleTile, cls).__new__(cls, *args, **kwargs)
         self.TILE_SIZE = 256
         self.shape = self.TILE_SIZE, self.TILE_SIZE
-        
+
         self.x = self.google[0]
         self.y = self.google[1]
 
@@ -25,12 +27,12 @@ class GoogleTile(Tile):
         self._data = None
 
         return self
-    
-    def set_layer(self, layer='s'):
+
+    def set_layer(self, layer="s"):
         self._url = self._get_url_for_layer(layer)
         self.url = self._url.format(x=self.x, y=self.y, z=self.zoom)
-    
-    def _get_url_for_layer(self, layer='s'):
+
+    def _get_url_for_layer(self, layer="s"):
         __doc__ = """
         Returns a URL for a Google Maps tile.
 
@@ -46,46 +48,48 @@ class GoogleTile(Tile):
                 m: Google Maps
                 h: Google Roads
         """
-        l = layer.lower()
-        valid = '\n' + '\n'.join(__doc__.split('\n')[7:10])
-        assert l in 'syp', f"Invalid layer: {layer}, valid layers are {valid}"
+        layer = layer.lower()
+        valid = "\n" + "\n".join(__doc__.split("\n")[7:10])
+        assert layer in "syp", f"Invalid layer: {layer}, valid layers are {valid}"
 
         # map tile number to subdomain
-        d = 0 if l in 'msy' else 1
+        d = 0 if layer in "msy" else 1
 
-        url = f"https://mt{d}.google.com/vt/lyrs={l}&x={{x}}&y={{y}}&z={{z}}"
+        url = f"https://mt{d}.google.com/vt/lyrs={layer}&x={{x}}&y={{y}}&z={{z}}"
         return url
-    
+
     @property
     def bbox(self):
         lower_left = self.bounds[0]
         upper_right = self.bounds[1]
         bbox_WSEN = [
-            lower_left.longitude, lower_left.latitude, 
-            upper_right.longitude, upper_right.latitude]
+            lower_left.longitude,
+            lower_left.latitude,
+            upper_right.longitude,
+            upper_right.latitude,
+        ]
         return bbox_WSEN
-    
+
     @property
     def image(self):
         if self._image is None:
             self._image = self.get_image()
         return self._image
-    
+
     @property
     def data(self):
         if self._data is None:
             self._data = self.get_data()
         return self._data
-    
+
     @property
     def xr(self):
         if self._xr is None:
             self._xr = self.get_dataarray()
         return self._xr
-    
+
     @property
     def lat(self):
-
         y0 = self.y * self.TILE_SIZE
         y1 = y0 + self.TILE_SIZE
         x = self.x * self.TILE_SIZE + self.TILE_SIZE // 2
@@ -93,27 +97,27 @@ class GoogleTile(Tile):
         pixel_range = np.arange(y0, y1, dtype=float)
         lats = self._from_pixel_loc_to_latlng(x, pixel_range, self.zoom)[0]
         return lats
-    
+
     @property
     def lon(self):
-
         x0 = self.x * self.TILE_SIZE
         x1 = x0 + self.TILE_SIZE
         y = self.y * self.TILE_SIZE + self.TILE_SIZE // 2
-        
+
         pixel_range = np.arange(x0, x1, dtype=float)
         lons = self._from_pixel_loc_to_latlng(pixel_range, y, self.zoom)[1]
         return lons
-    
+
     @staticmethod
     def _download_url_to_bytes(url):
-        import requests
         from io import BytesIO
+
+        import requests
 
         response = requests.get(url)
         io = BytesIO(response.content)
         return io
-    
+
     @staticmethod
     def get_resolution_from_bbox_and_shape(bbox, shape):
         from rasterio.transform import from_bounds
@@ -129,9 +133,8 @@ class GoogleTile(Tile):
         file_obj = self._download_url_to_bytes(self.url)
         image = Image.open(file_obj)
         return image
-    
-    def get_data(self):
 
+    def get_data(self):
         image = self.get_image()
         data = np.array(image)
         return data
@@ -141,7 +144,7 @@ class GoogleTile(Tile):
 
         pixels_per_lon_degree = self.TILE_SIZE / 360.0
         pixels_per_lon_radian = self.TILE_SIZE / (2 * math.pi)
-        
+
         x0 = self.TILE_SIZE / 2.0
         y0 = self.TILE_SIZE / 2.0
 
@@ -150,14 +153,13 @@ class GoogleTile(Tile):
         y /= num_tiles
 
         lon = (x - x0) / pixels_per_lon_degree
-        
+
         lat_radians = (y - y0) / -pixels_per_lon_radian
         lat = np.rad2deg(2 * np.arctan(np.exp(lat_radians)) - np.pi / 2)
 
         return lat, lon
-    
+
     def get_dataarray(self):
-        
         data = self.get_data()
         da = xr.DataArray(
             data=data,
@@ -169,19 +171,17 @@ class GoogleTile(Tile):
             },
         ).transpose("band", "y", "x")
 
-        da = (
-            da
-            .rio.write_crs("EPSG:4326"))
+        da = da.rio.write_crs("EPSG:4326")
 
         return da
 
 
 class GoogleScene:
-    def __init__(self, bbox, load=False, max_pixels=2048, map_layer='s'):
+    def __init__(self, bbox, load=False, max_pixels=2048, map_layer="s"):
         self.bbox = bbox
         self.max_pixels = max_pixels
         self.map_layer = map_layer
-        
+
         self._data = None
         self._xr = None
 
@@ -192,25 +192,25 @@ class GoogleScene:
 
         if load:
             _ = self.xr
-    
+
     @property
     def tiles(self):
         if self._tiles is None:
             self._tiles = self.get_tiles()
         return self._tiles
-    
+
     @property
     def xr(self):
         if self._xr is None:
             self._xr = self._get_dataarray()
         return self._xr
-    
+
     @property
     def data(self):
         if self._data is None:
             self._data = self.xr.data
         return self._data
-    
+
     def plot(self, ax=None, dpi=100, **kwargs):
         import matplotlib.pyplot as plt
 
@@ -234,11 +234,10 @@ class GoogleScene:
         ax.set_title("")
 
         ax.set_position([0, 0, 1, 1])
-        
+
         return fig, ax
 
     def _get_zoom_level_resolution(self):
-
         zoom_levels = range(20)
         res_m = {}
         for z in zoom_levels:
@@ -247,7 +246,7 @@ class GoogleScene:
             tile.shape
             res_deg = GoogleTile.get_resolution_from_bbox_and_shape(bbox, (256, 256))
             res_m[z] = res_deg * 111139
-        
+
         return res_m
 
     def _get_zoom_level(self):
@@ -258,10 +257,9 @@ class GoogleScene:
         for z, res in self._zoom_res.items():
             n_pixels_in_bbox_at_res = bbox_size_m / res
             if n_pixels_in_bbox_at_res > self.max_pixels:
-                return z 
-    
+                return z
+
     def get_tiles(self):
-        
         zoom = 19 if self.zoom is None else self.zoom
         west, south, east, north = self.bbox
         ll = GoogleTile.for_latitude_longitude(south, west, zoom)
@@ -269,7 +267,7 @@ class GoogleScene:
 
         x0, x1 = min(ll.x, ur.x), max(ll.x, ur.x)
         y0, y1 = min(ll.y, ur.y), max(ll.y, ur.y)
-        
+
         x_range = range(x0, x1 + 1)
         y_range = range(y0, y1 + 1)
 
@@ -278,7 +276,7 @@ class GoogleScene:
             for y in y_range:
                 tile = GoogleTile.from_google(x, y, zoom)
                 tile.set_layer(self.map_layer)
-                tiles += tile,
+                tiles += (tile,)
 
         return tiles
 
@@ -287,10 +285,9 @@ class GoogleScene:
 
         func = joblib.delayed(lambda tile: tile.xr)
         tasks = [func(tile) for tile in tiles]
-        _ = joblib.Parallel(n_jobs=n_jobs, verbose=0, backend='threading')(tasks)
-    
+        _ = joblib.Parallel(n_jobs=n_jobs, verbose=0, backend="threading")(tasks)
+
     def _get_dataarray(self):
-        
         n_tiles = len(self.tiles)
         n_jobs = min(24, n_tiles)
 
@@ -301,16 +298,15 @@ class GoogleScene:
 
         logger.info("Combining tiles with xarray.combine_by_coords")
         da = xr.combine_by_coords(da_list)
-        
+
         da = da.sortby("y").sortby("x")
         da = da.sel(
-            x=slice(self.bbox[0], self.bbox[2]),
-            y=slice(self.bbox[1], self.bbox[3]))
+            x=slice(self.bbox[0], self.bbox[2]), y=slice(self.bbox[1], self.bbox[3])
+        )
 
         return da
 
     def _repr_html_(self):
-
         if self._xr is None:
             pass
         else:

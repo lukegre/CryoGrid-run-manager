@@ -888,7 +888,7 @@ wheels = [
 
 [[package]]
 name = "cryogrid-pytools"
-version = "0.2.7"
+version = "0.2.8"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "dask", version = "2024.8.0", source = { registry = "https://pypi.org/simple" }, extra = ["array", "diagnostics"], marker = "python_full_version < '3.10'" },
@@ -907,9 +907,9 @@ dependencies = [
     { name = "xarray", version = "2024.7.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
     { name = "xarray", version = "2025.1.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/dd/5b/2820a8c63b7b3604aa94d01c73dd49dbf42b9930c30820ecad4ec9e80ba5/cryogrid_pytools-0.2.7.tar.gz", hash = "sha256:ec6e944d326d34abf236a3dfe8b68e40e25cf20c71044af71027809d3a05c3f6", size = 1462700 }
+sdist = { url = "https://files.pythonhosted.org/packages/7f/9e/be9297f30f4705104331ebde1f9501beb75b874386418451d7dce06218ef/cryogrid_pytools-0.2.8.tar.gz", hash = "sha256:514c62a321ebe7559426bd4d765f25231ff296e1188fc6d3e0552642dd5d889f", size = 1462834 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/9b/8f/53000fcf2bc9ba8c3d0dd2b67a308117ff65dac7c6c7ff0c06fd53443b66/cryogrid_pytools-0.2.7-py3-none-any.whl", hash = "sha256:dceababc608aec927f8207c4495d7775b713830155785c9e2db689323f2aa9e2", size = 30404 },
+    { url = "https://files.pythonhosted.org/packages/ac/14/b0b6c928c08c055e788129cc4134ac753131bdb730621b67790767f1a147/cryogrid_pytools-0.2.8-py3-none-any.whl", hash = "sha256:07b143c5b0156b2ae0862c351c4d4605a012467d627935726df2419e280b3978", size = 30496 },
 ]
 
 [package.optional-dependencies]
@@ -962,7 +962,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "cmocean", specifier = ">=4.0.3" },
-    { name = "cryogrid-pytools", extras = ["data", "viz"], specifier = ">=0.2.7" },
+    { name = "cryogrid-pytools", extras = ["data", "viz"], specifier = ">=0.2.8" },
     { name = "dask", extras = ["dataframe"], specifier = ">=2024.8.0" },
     { name = "folium", specifier = ">=0.19.4" },
     { name = "h5py", specifier = ">=3.12.1" },
