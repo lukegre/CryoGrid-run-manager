@@ -224,16 +224,24 @@ def get_era5_from_s3_bucket(bbox: tuple, time_start: str, time_end: str):
 
     import dotenv
     import xarray as xr
+    import pandas as pd
 
     bbox = list(deepcopy(bbox))
 
     if not dotenv.load_dotenv():
         raise FileNotFoundError("Could not find .env file with S3 credentials")
+    
+    t0 = pd.Timestamp(time_start)
+    t1 = pd.Timestamp(time_end)
+    year0 = t0.year
+    year1 = t1.year
 
-    fname_era5_s3 = "s3://spi-pamir-c7-sdsc/era5_data/central_asia/central_asia-*.zarr"
+    fname_era5_s3 = "s3://spi-pamir-c7-sdsc/era5_data/central_asia/central_asia-{year}.zarr"
+    flist_era5_zarr = [fname_era5_s3.format(year=year) for year in range(year0, year1 + 1)]
 
     ds_central_asia = xr.open_mfdataset(
-        fname_era5_s3, 
+        flist_era5_zarr,
+        parallel=True, 
         engine='zarr',  
         combine='by_coords',  # combines by time dime
         compat='override',  # fastest option
