@@ -146,7 +146,7 @@ classdef OUT_regridded < matlab.mixin.Copyable
                     disp([datestr(t)])
 
                     % Add forcing data to out
-                    out = add_forcing(out, tile);
+                    % out = add_forcing(out, tile);
                      
                     if ~(exist([result_path run_name])==7)
                         mkdir([result_path run_name])

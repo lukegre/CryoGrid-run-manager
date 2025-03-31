@@ -230,10 +230,14 @@ def get_era5_from_s3_bucket(bbox: tuple, time_start: str, time_end: str):
     if not dotenv.load_dotenv():
         raise FileNotFoundError("Could not find .env file with S3 credentials")
 
-    fname_era5_s3 = "s3://spi-pamir-c7-sdsc/era5_data/central_asia.zarr/"
+    fname_era5_s3 = "s3://spi-pamir-c7-sdsc/era5_data/central_asia/central_asia-*.zarr"
 
-    ds_central_asia = xr.open_zarr(
-        fname_era5_s3
+    ds_central_asia = xr.open_mfdataset(
+        fname_era5_s3, 
+        engine='zarr',  
+        combine='by_coords',  # combines by time dime
+        compat='override',  # fastest option
+        coords='all'  # keep all coordinates
     )  # make sure that .env is set up correctly
 
     logger.info(

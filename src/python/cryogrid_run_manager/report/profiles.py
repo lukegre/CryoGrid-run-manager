@@ -9,7 +9,7 @@ import xarray as xr
 
 @lru_cache
 def open_profiles(fname_profiles: str, deepest_point: int) -> xr.Dataset:
-    ds = cg.read_OUT_regridded_FCI2_clusters(
+    ds = cg.read_OUT_regridded_clusters(
         fname_profiles, deepest_point=deepest_point
     )
     return ds
@@ -86,13 +86,14 @@ def make_profile_plots(
     import re
 
     import matplotlib.pyplot as plt
-    from cryogrid_pytools import viz
+    from cryogrid_pytools import viz, utils
     from loguru import logger
 
     path_dest = pathlib.Path(fig_dest)
     path_dest.mkdir(parents=True, exist_ok=True)
 
-    flist = get_flist(fname_profiles, exclude="TDD")
+    flist = utils.regex_glob(fname_profiles)
+
     if len(flist) == 0:
         raise FileNotFoundError(f"No files found with pattern {fname_profiles}")
     fname_fmt = flist[0]
@@ -113,6 +114,7 @@ def make_profile_plots(
             logger.info(f"Creating profile plot for {index}")
 
         ds = open_profiles(fname, deepest_point)
+        ds = ds.set_index(level='depth').rename(level='depth')
         fig, axs, imgs = viz.plot_profiles(ds.sel(gridcell=index))
 
         fig.tight_layout()

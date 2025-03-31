@@ -3,10 +3,10 @@ name = "cryogrid_run_manager"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
     "cmocean>=4.0.3",
-    "cryogrid-pytools[data,viz]>=0.2.8",
+    "cryogrid-pytools[data,viz]>=0.3.1",
     "dask[dataframe]>=2024.8.0",
     "folium>=0.19.4",
     "h5py>=3.12.1",
@@ -14,10 +14,13 @@ dependencies = [
     "mapclassify>=2.8.1",
     "matplotlib>=3.9.4",
     "pygeotile>=1.0.6",
+    "pyzenodo3>=1.0.2",
+    "s3fs==2024.12.0",
     "scikit-learn>=1.6.1",
+    "xarray==2025.1.1",
     "xarray-raster-vector",
     "xarray-spatial>=0.4.0",
-    "pyzenodo3>=1.0.2",
+    "zarr==2.18.3",
 ]
 
 [project.scripts]

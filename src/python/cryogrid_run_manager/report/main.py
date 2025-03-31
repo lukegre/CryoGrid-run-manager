@@ -5,25 +5,27 @@ import folium
 from loguru import logger
 
 
-def create_report(experiment_path, report_path=None, with_profile_plots=True):
+def create_report(dirname_experiment, dirname_profiles='{dirname_experiment}/output/', fname_report=None, with_profile_plots=True):
     from .excel import get_excel_config, get_max_depth
     from .profiles import make_profile_plots
 
-    experiment_path = pathlib.Path(experiment_path).resolve()
-    if report_path is None:
-        experiment_name = experiment_path.name
-        report_path = experiment_path / f"figures/report-{experiment_name}.html"
+    dirname_experiment = pathlib.Path(dirname_experiment).resolve()
+    dirname_profiles = pathlib.Path(dirname_profiles.format(str(dirname_experiment)))
+    if fname_report is None:
+        experiment_name = dirname_experiment.name
+        fname_report = dirname_experiment / f"figures/report-{experiment_name}.html"
 
-    fname_excel = str(experiment_path / f"{experiment_path.name}.xlsx")
+    fname_excel = str(dirname_experiment / f"{dirname_experiment.name}.xlsx")
     config = get_excel_config(fname_excel)
 
     last_run = config.get_start_end_times().time_end
 
-    fname_spatial = experiment_path / "output/run_spatial_info.mat"
-    fname_profiles_last = str(experiment_path / f"output/*_*_{last_run:%Y%m%d}.mat")
-    fname_profiles_all = str(experiment_path / "output/*_*_????????.mat")
+    fname_spatial = dirname_profiles / "run_spatial_info.mat"
+    fname_profiles_last = str(dirname_profiles / f"*_*_{last_run:%Y%m%d}.mat")
+    fname_profiles_all = str(dirname_profiles / ".*_[0-9]{1,}_[0-9]{8}.mat")
     fname_dem = config.get_dem_path()
-    fpath_figures = experiment_path / "figures/profiles"
+    
+    fpath_figures = dirname_experiment / "figures/profiles"
 
     if with_profile_plots:
         deepest_point = get_max_depth(fname_excel)
@@ -34,7 +36,7 @@ def create_report(experiment_path, report_path=None, with_profile_plots=True):
             fig_dest=str(fpath_figures),
             overwrite=False,
         )
-        fpath_figures = fpath_figures.relative_to(report_path.parent)
+        fpath_figures = fpath_figures.relative_to(fname_report.parent)
     else:
         fpath_figures = None
 
@@ -48,8 +50,8 @@ def create_report(experiment_path, report_path=None, with_profile_plots=True):
         profile_figure_path=fpath_figures,
     )
 
-    logger.info(f"Saving report to {report_path.resolve()}")
-    m.save(report_path)
+    logger.info(f"Saving report to {fname_report.resolve()}")
+    m.save(fname_report)
 
 
 def get_crs_from_dem(fname_dem):
