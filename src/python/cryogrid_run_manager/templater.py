@@ -293,7 +293,7 @@ def get_era5_from_s3_bucket(bbox: tuple, time_start: str, time_end: str):
 def get_geospatial_data(bbox: tuple, n_land_classes=3) -> xr.Dataset:
     from cryogrid_pytools import data
 
-    from .stratigraphy import calc_surface_classes_3, calc_surface_classes_4
+    from .data.stratigraphy import calc_surface_classes_3, calc_surface_classes_4
 
     bbox_str = ", ".join([f"{x:.3f}" for x in bbox])
     logger.info(f"Getting geospatial data for bbox [{bbox_str}]")

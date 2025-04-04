@@ -211,6 +211,18 @@ wheels = [
 ]
 
 [[package]]
+name = "blessings"
+version = "1.7"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "six" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/5c/f8/9f5e69a63a9243448350b44c87fae74588aa634979e6c0c501f26a4f6df7/blessings-1.7.tar.gz", hash = "sha256:98e5854d805f50a5b58ac2333411b0482516a8210f23f43308baeb58d77c157d", size = 28194 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/03/74/489f85a78247609c6b4f13733cbf3ba0d864b11aa565617b645d6fdf2a4a/blessings-1.7-py3-none-any.whl", hash = "sha256:b1fdd7e7a675295630f9ae71527a8ebc10bfefa236b3d6aa4932ee4462c17ba3", size = 18460 },
+]
+
+[[package]]
 name = "bokeh"
 version = "3.7.2"
 source = { registry = "https://pypi.org/simple" }
@@ -699,7 +711,7 @@ wheels = [
 
 [[package]]
 name = "cryogrid-pytools"
-version = "0.3.1"
+version = "0.3.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "dask", extra = ["array", "diagnostics"] },
@@ -714,24 +726,29 @@ dependencies = [
     { name = "scipy" },
     { name = "xarray" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/6d/d0/60a21e2fc3589ed21dd057cadd66e5650a6d5f72ffe58096c930b92bfa96/cryogrid_pytools-0.3.1.tar.gz", hash = "sha256:dd17bd54dfa540b2d36db0351857caefda19ae47b1f4a18f1bc2e7f2eea6fb6e", size = 1419728 }
+sdist = { url = "https://files.pythonhosted.org/packages/9e/0b/5df9ec3af9b8618a877f5066d071b98ac4aa79e26a9c1dc2bf963d510b72/cryogrid_pytools-0.3.3.tar.gz", hash = "sha256:1823b542dffdc0e52f4cde4690d985ad1847267a106f84b7e710ec1934a8e5e3", size = 1158908 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/39/e6/4c1f416b21ae2115b2dfa9587756666752c68679900e390abf0a2d223cc7/cryogrid_pytools-0.3.1-py3-none-any.whl", hash = "sha256:9ad4b3a6981668c3c842e1a7a3e2e7d55ad7e951e440c52a983d4059af7f5fff", size = 32411 },
+    { url = "https://files.pythonhosted.org/packages/38/bf/4c2bf3ab979a6655ef59c92a388fd1941d9926ba8add9bd6bd274d2bbb44/cryogrid_pytools-0.3.3-py3-none-any.whl", hash = "sha256:2614137f6537039b778f6821d5b2d81505ef17c3cfc5501fe2b8535fffb9f142", size = 40484 },
 ]
 
 [package.optional-dependencies]
 data = [
     { name = "bottleneck" },
     { name = "earthaccess" },
+    { name = "ee" },
     { name = "era5-downloader" },
     { name = "geopandas" },
     { name = "ipywidgets" },
     { name = "memoization" },
     { name = "planetary-computer" },
     { name = "pooch" },
+    { name = "pyarrow" },
     { name = "pystac-client" },
+    { name = "pyzenodo3" },
     { name = "rioxarray" },
+    { name = "setuptools" },
     { name = "stackstac" },
+    { name = "wxee" },
     { name = "xarray-raster-vector" },
 ]
 viz = [
@@ -763,7 +780,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "cmocean", specifier = ">=4.0.3" },
-    { name = "cryogrid-pytools", extras = ["data", "viz"], specifier = ">=0.3.1" },
+    { name = "cryogrid-pytools", extras = ["data", "viz"], specifier = ">=0.3.3" },
     { name = "dask", extras = ["dataframe"], specifier = ">=2024.8.0" },
     { name = "folium", specifier = ">=0.19.4" },
     { name = "h5py", specifier = ">=3.12.1" },
@@ -919,6 +936,32 @@ sdist = { url = "https://files.pythonhosted.org/packages/09/bb/a66d2fa81b06a7dce
 wheels = [
     { url = "https://files.pythonhosted.org/packages/7c/e3/8597130029c34c62d3de30462d64f8870bc0dee439bdf9bbdf3aba9d4c7e/earthaccess-0.14.0-py3-none-any.whl", hash = "sha256:6553cede23042645d8abe5b0cd7584b73e364128d5a35dcd67da30fd57618602", size = 64945 },
 ]
+
+[[package]]
+name = "earthengine-api"
+version = "1.5.9"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "google-api-python-client" },
+    { name = "google-auth" },
+    { name = "google-auth-httplib2" },
+    { name = "google-cloud-storage" },
+    { name = "httplib2" },
+    { name = "requests" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/fa/30/2b0b4654d4e4a846587605c09bb8181961280abf59b62dab567af7fabf4b/earthengine_api-1.5.9.tar.gz", hash = "sha256:0029f4921f08f1913e4c801a8c07f145d48aabeb21d59efb11851048e24f71f0", size = 415218 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2d/f0/2e86a16768ba5afd7acb749cf3800085fe5ec82f5517388723d3043a62ba/earthengine_api-1.5.9-py3-none-any.whl", hash = "sha256:a8d008891139af80590676bad7494d65cf1f16b2bb4e9fe62964289936c8d11a", size = 461097 },
+]
+
+[[package]]
+name = "ee"
+version = "0.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "blessings" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/1e/85/c84cb4e02eeec6be1be045bc9b6c16ed964cb0c614abd3f0eee127f1b2be/ee-0.2.tar.gz", hash = "sha256:3f1bc017e8eb293425e7378a865c2b24cef67166f6929bd2289ea9413d0a7c65", size = 3038 }
 
 [[package]]
 name = "era5-downloader"
@@ -1201,6 +1244,22 @@ wheels = [
 ]
 
 [[package]]
+name = "google-api-python-client"
+version = "2.166.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "google-api-core" },
+    { name = "google-auth" },
+    { name = "google-auth-httplib2" },
+    { name = "httplib2" },
+    { name = "uritemplate" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/c4/c9/eac7b4e843039f0a54a563c2328d43de6f02e426a11b6a7e378996f667db/google_api_python_client-2.166.0.tar.gz", hash = "sha256:b8cf843bd9d736c134aef76cf1dc7a47c9283a2ef24267b97207b9dd43b30ef7", size = 12680525 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b4/44/ae1528a6ca296d89704c8febb72b3e263c28b4e50ab29b9202df7a0f273d/google_api_python_client-2.166.0-py2.py3-none-any.whl", hash = "sha256:dd8cc74d9fc18538ab05cbd2e93cb4f82382f910c5f6945db06c91f1deae6e45", size = 13190078 },
+]
+
+[[package]]
 name = "google-auth"
 version = "2.38.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1212,6 +1271,19 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/c6/eb/d504ba1daf190af6b204a9d4714d457462b486043744901a6eeea711f913/google_auth-2.38.0.tar.gz", hash = "sha256:8285113607d3b80a3f1543b75962447ba8a09fe85783432a784fdeef6ac094c4", size = 270866 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/9d/47/603554949a37bca5b7f894d51896a9c534b9eab808e2520a748e081669d0/google_auth-2.38.0-py2.py3-none-any.whl", hash = "sha256:e7dae6694313f434a2727bf2906f27ad259bae090d7aa896590d86feec3d9d4a", size = 210770 },
+]
+
+[[package]]
+name = "google-auth-httplib2"
+version = "0.2.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "google-auth" },
+    { name = "httplib2" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/56/be/217a598a818567b28e859ff087f347475c807a5649296fb5a817c58dacef/google-auth-httplib2-0.2.0.tar.gz", hash = "sha256:38aa7badf48f974f1eb9861794e9c0cb2a0511a4ec0679b1f886d108f5640e05", size = 10842 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/be/8a/fe34d2f3f9470a27b01c9e76226965863f153d5fbe276f83608562e49c04/google_auth_httplib2-0.2.0-py2.py3-none-any.whl", hash = "sha256:b65a0a2123300dd71281a7bf6e64d65a0759287df52729bdd1ae2e47dc311a3d", size = 9253 },
 ]
 
 [[package]]
@@ -1361,6 +1433,18 @@ wheels = [
 ]
 
 [[package]]
+name = "httplib2"
+version = "0.22.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pyparsing" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/3d/ad/2371116b22d616c194aa25ec410c9c6c37f23599dcd590502b74db197584/httplib2-0.22.0.tar.gz", hash = "sha256:d7a10bc5ef5ab08322488bde8c726eeee5c8618723fdb399597ec58f3d82df81", size = 351116 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a8/6c/d2fbdaaa5959339d53ba38e94c123e4e84b8fbc4b84beb0e70d7c1608486/httplib2-0.22.0-py3-none-any.whl", hash = "sha256:14ae0a53c1ba8f3d37e9e27cf37eabb0fb9980f435ba405d546948b009dd64dc", size = 96854 },
+]
+
+[[package]]
 name = "idna"
 version = "3.10"
 source = { registry = "https://pypi.org/simple" }
@@ -1387,7 +1471,7 @@ name = "importlib-metadata"
 version = "8.6.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "zipp" },
+    { name = "zipp", marker = "python_full_version < '3.12'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/33/08/c1395a292bb23fd03bdf572a1357c5a733d3eecbab877641ceacab23db6e/importlib_metadata-8.6.1.tar.gz", hash = "sha256:310b41d755445d74569f993ccfc22838295d9fe005425094fad953d7f15c8580", size = 55767 }
 wheels = [
@@ -3514,6 +3598,15 @@ wheels = [
 ]
 
 [[package]]
+name = "setuptools"
+version = "78.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/a9/5a/0db4da3bc908df06e5efae42b44e75c81dd52716e10192ff36d0c1c8e379/setuptools-78.1.0.tar.gz", hash = "sha256:18fd474d4a82a5f83dac888df697af65afa82dec7323d09c3e37d1f14288da54", size = 1367827 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/54/21/f43f0a1fa8b06b32812e0975981f4677d28e0f3271601dc88ac5a5b83220/setuptools-78.1.0-py3-none-any.whl", hash = "sha256:3e386e96793c8702ae83d17b853fb93d3e09ef82ec62722e61da5cd22376dcd8", size = 1256108 },
+]
+
+[[package]]
 name = "shapely"
 version = "2.0.7"
 source = { registry = "https://pypi.org/simple" }
@@ -3715,6 +3808,15 @@ wheels = [
 ]
 
 [[package]]
+name = "uritemplate"
+version = "4.1.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/d2/5a/4742fdba39cd02a56226815abfa72fe0aa81c33bed16ed045647d6000eba/uritemplate-4.1.1.tar.gz", hash = "sha256:4346edfc5c3b79f694bccd6d6099a322bbeb628dbf2cd86eea55a456ce5124f0", size = 273898 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/81/c0/7461b49cd25aeece13766f02ee576d1db528f1c37ce69aee300e075b485b/uritemplate-4.1.1-py2.py3-none-any.whl", hash = "sha256:830c08b8d99bdd312ea4ead05994a38e8936266f84b9a7878232db50b044e02e", size = 10356 },
+]
+
+[[package]]
 name = "urllib3"
 version = "2.3.0"
 source = { registry = "https://pypi.org/simple" }
@@ -3812,6 +3914,24 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/6a/e1/0122853035b40b3f333bbb25f1939fc1045e21dd518f7f0922b60c156f7c/wrapt-1.17.2-cp313-cp313t-win32.whl", hash = "sha256:13e6afb7fe71fe7485a4550a8844cc9ffbe263c0f1a1eea569bc7091d4898555", size = 37986 },
     { url = "https://files.pythonhosted.org/packages/09/5e/1655cf481e079c1f22d0cabdd4e51733679932718dc23bf2db175f329b76/wrapt-1.17.2-cp313-cp313t-win_amd64.whl", hash = "sha256:eaf675418ed6b3b31c7a989fd007fa7c3be66ce14e5c3b27336383604c9da85c", size = 40750 },
     { url = "https://files.pythonhosted.org/packages/2d/82/f56956041adef78f849db6b289b282e72b55ab8045a75abad81898c28d19/wrapt-1.17.2-py3-none-any.whl", hash = "sha256:b18f2d1533a71f069c7f82d524a52599053d4c7166e9dd374ae2136b7f40f7c8", size = 23594 },
+]
+
+[[package]]
+name = "wxee"
+version = "0.4.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "earthengine-api" },
+    { name = "joblib" },
+    { name = "rasterio" },
+    { name = "requests" },
+    { name = "rioxarray" },
+    { name = "tqdm" },
+    { name = "xarray" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/c0/a5/5bf26cd73af5e4f278efb45d497fa7e7eddbcf8ce084af439fa28b1c922e/wxee-0.4.2.tar.gz", hash = "sha256:e197df48c8b975fdc50793d2c554c9ec9617fa11ed262b2fec3b983e46f71042", size = 22149 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/bb/34/89b0276caa64cf5ffb387b5941d05110e66a124f0c4951cf25a16650dcf4/wxee-0.4.2-py3-none-any.whl", hash = "sha256:e74f87b6627a86aab5318e8fcb1d8a8d7c6dc55369e05a3ac1edde47b2abba17", size = 26938 },
 ]
 
 [[package]]
