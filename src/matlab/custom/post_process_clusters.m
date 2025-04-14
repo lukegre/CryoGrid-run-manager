@@ -13,6 +13,10 @@ data.slope_angle = run_info.SPATIAL.STATVAR.slope_angle;
 data.aspect = run_info.SPATIAL.STATVAR.aspect;
 data.skyview_factor = run_info.SPATIAL.STATVAR.skyview_factor;
 data.stratigraphy_index = run_info.SPATIAL.STATVAR.stratigraphy_index;
+% data.snow_index = run_info.SPATIAL.STATVAR.snow_index;
+% data.roughness_length = run_info.SPATIAL.STATVAR.roughness_length;
+% data.albedo = run_info.SPATIAL.STATVAR.albedo;
+% data.emissivity = run_info.SPATIAL.STATVAR.emissivity;
 data.matlab_index = [1 : size(data.elevation, 1)]';
 
 data.cluster_num = run_info.CLUSTER.STATVAR.cluster_number;

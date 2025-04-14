@@ -1,3 +1,5 @@
+from functools import lru_cache
+
 import numpy as np
 import rioxarray as rxr  # noqa
 import xarray as xr
@@ -176,6 +178,7 @@ class GoogleTile(Tile):
         return da
 
 
+@lru_cache(maxsize=3)
 class GoogleScene:
     def __init__(self, bbox, load=False, max_pixels=2048, map_layer="s"):
         self.bbox = bbox
@@ -225,7 +228,7 @@ class GoogleScene:
         else:
             fig = ax.get_figure()
 
-        props = dict()
+        props = {}
         props.update(kwargs)
         da.plot.imshow(ax=ax, **props)
 

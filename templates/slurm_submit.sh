@@ -3,7 +3,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=36
 #SBATCH --time=32:00:00
-#SBATCH --job-name="cryogrid_matlab"
+#SBATCH --job-name="cryogrid"
 #SBATCH --mem-per-cpu=2304
 #SBATCH --tmp=64000
 #SBATCH --output="log_slurm_job.out"
@@ -22,5 +22,5 @@ srun bash -c '
 # this runs the matlab script run_cryogrid.m in the current directory
 # as a batch job on the cluster assuming that your cluster uses the SLURM scheduler
 
-# MODIFICATIONS: 
+# MODIFICATIONS:
 # 2025-03-14: mem-per-cpu reduced from 3084 to 2304 as only 63% of memory used in 36 CPU run

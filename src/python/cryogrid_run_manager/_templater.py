@@ -223,29 +223,33 @@ def get_era5_from_s3_bucket(bbox: tuple, time_start: str, time_end: str):
     from copy import deepcopy
 
     import dotenv
-    import xarray as xr
     import pandas as pd
+    import xarray as xr
 
     bbox = list(deepcopy(bbox))
 
     if not dotenv.load_dotenv():
         raise FileNotFoundError("Could not find .env file with S3 credentials")
-    
+
     t0 = pd.Timestamp(time_start)
     t1 = pd.Timestamp(time_end)
     year0 = t0.year
     year1 = t1.year
 
-    fname_era5_s3 = "s3://spi-pamir-c7-sdsc/era5_data/central_asia/central_asia-{year}.zarr"
-    flist_era5_zarr = [fname_era5_s3.format(year=year) for year in range(year0, year1 + 1)]
+    fname_era5_s3 = (
+        "s3://spi-pamir-c7-sdsc/era5_data/central_asia/central_asia-{year}.zarr"
+    )
+    flist_era5_zarr = [
+        fname_era5_s3.format(year=year) for year in range(year0, year1 + 1)
+    ]
 
     ds_central_asia = xr.open_mfdataset(
         flist_era5_zarr,
-        parallel=True, 
-        engine='zarr',  
-        combine='by_coords',  # combines by time dime
-        compat='override',  # fastest option
-        coords='all'  # keep all coordinates
+        parallel=True,
+        engine="zarr",
+        combine="by_coords",  # combines by time dime
+        compat="override",  # fastest option
+        coords="all",  # keep all coordinates
     )  # make sure that .env is set up correctly
 
     logger.info(
@@ -293,7 +297,7 @@ def get_era5_from_s3_bucket(bbox: tuple, time_start: str, time_end: str):
 def get_geospatial_data(bbox: tuple, n_land_classes=3) -> xr.Dataset:
     from cryogrid_pytools import data
 
-    from .data.stratigraphy import calc_surface_classes_3, calc_surface_classes_4
+    from .templater.surface_index import calc_surface_classes_3, calc_surface_classes_4
 
     bbox_str = ", ".join([f"{x:.3f}" for x in bbox])
     logger.info(f"Getting geospatial data for bbox [{bbox_str}]")

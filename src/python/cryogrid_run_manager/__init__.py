@@ -1,8 +1,6 @@
-from . import report
-from . import templater
-from . import utils
-
 import rioxarray as rxr  # noqa
-import xarray_raster_vector as xrv  # noqa
+from cryogrid_pytools import xr_raster_vector as xrv  # noqa
+
+from . import report, templater, utils
 
 __all__ = ["report", "templater", "utils"]
