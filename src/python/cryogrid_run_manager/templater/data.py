@@ -6,7 +6,38 @@ import xarray as xr
 from loguru import logger
 
 
-def make_data_for_run(run_path, res_m=100, sampling="random"):
+def make_data_for_ensemble_run(run_path, bbox):
+    """
+    Create the geospatial data for the run. This includes the following:
+        - bbox.txt
+        - elevation.tif
+        - surface_classes.tif
+        - geospatial_data.nc
+        - era5.mat
+    """
+    from cryogrid_pytools import excel_config
+
+    from . import data
+
+    run_path = pathlib.Path(run_path)
+    forcing_path = run_path / "forcing"
+    run_name = run_path.name
+
+    path_config_xlsx = run_path / f"{run_name}.xlsx"
+    path_era5_mat = forcing_path / "era5.mat"
+
+    config = excel_config.CryoGridConfigExcel(
+        path_config_xlsx, check_file_paths=False, check_strat_layers=False
+    )
+    return config
+    times = config.get_start_end_times()
+
+    if not path_era5_mat.exists():
+        ds_era5 = data.get_era5_from_s3_bucket(bbox, times.time_start, times.time_end)
+        era5_to_matlab(ds_era5, save_path=str(path_era5_mat))
+
+
+def make_data_for_cluster_run(run_path, res_m=100, sampling="random"):
     """
     Create the geospatial data for the run. This includes the following:
         - bbox.txt

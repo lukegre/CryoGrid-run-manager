@@ -1,4 +1,4 @@
-# never upload 
+# never upload
 .env
 
 # system caching
@@ -25,3 +25,5 @@ notebooks/*.html
 figures/*
 
 !*/.gitkeep
+
+data

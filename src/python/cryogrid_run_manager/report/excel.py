@@ -22,9 +22,7 @@ def get_stratigraphy_info(fname_excel):
     return strat_info
 
 
-def get_max_depth(
-    fname_excel, var_name="depth_below_ground", class_name="OUT_regridded_FCI2"
-):
+def get_max_depth(fname_excel, var_name="lower_elevation", class_name="OUT_regridded"):
     config = get_excel_config(fname_excel)
     df = config.get_class(class_name)
     depth = df.loc[var_name].iloc[0]

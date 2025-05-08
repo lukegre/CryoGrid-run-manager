@@ -44,7 +44,9 @@ def make_downloadable_url(sheet_url: str) -> str:
     return url
 
 
-def download_google_sheet_as_excel(sheet_url: str, dest_fpath: str):
+def download_google_sheet_as_excel(
+    sheet_url: str, dest_fpath: str, overwrite: bool = False
+) -> str:
     """
     Opens a Google Sheets document and returns its content as a string.
 
@@ -63,15 +65,17 @@ def download_google_sheet_as_excel(sheet_url: str, dest_fpath: str):
     url = make_downloadable_url(sheet_url)
 
     path = pathlib.Path(dest_fpath)
-    dest_path = path.parent
-    dest_name = path.name
+
+    if overwrite and path.exists():
+        # Remove the file if it already exists
+        path.unlink()
 
     # Download the file with pooch
     filename = pooch.retrieve(
         url,
         None,
-        fname=dest_name,
-        path=dest_path,
+        fname=path.name,
+        path=str(path.parent),
         progressbar=True,
     )
 

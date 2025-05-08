@@ -9,9 +9,7 @@ import xarray as xr
 
 @lru_cache
 def open_profiles(fname_profiles: str, deepest_point: int) -> xr.Dataset:
-    ds = cg.read_OUT_regridded_clusters(
-        fname_profiles, deepest_point=deepest_point
-    )
+    ds = cg.read_OUT_regridded_files(fname_profiles, deepest_point=deepest_point)
     return ds
 
 
@@ -62,7 +60,31 @@ def get_profile_locations(
     return points
 
 
-def make_profile_plots(
+def make_profile_plots_from_dataset(ds, output_dir: str = "."):
+    import joblib
+    import matplotlib.pyplot as plt
+
+    def save_image(ds, path=".", **savefig_props):
+        import pathlib
+
+        i = ds.index.item()
+        path = pathlib.Path(path)
+        path.mkdir(parents=True, exist_ok=True)
+        sname = path / f"{i}.png"
+        if sname.exists():
+            return
+
+        fig, axs, imgs = cg.viz.plot_profiles(ds)
+
+        fig.savefig(sname, **savefig_props)
+        plt.close("all")
+
+    func = joblib.delayed(save_image)
+    tasks = [func(ds.isel(index=i), path=output_dir) for i in range(ds.index.size)]
+    _ = joblib.Parallel(n_jobs=4, backend="loky", verbose=4)(tasks)
+
+
+def make_profile_plots_from_mat(
     fname_profiles: str, deepest_point: int, fig_dest: str, overwrite=False
 ) -> tuple[pathlib.Path, ...]:
     """Creates profile plots for the given profiles file pattern.
@@ -86,7 +108,7 @@ def make_profile_plots(
     import re
 
     import matplotlib.pyplot as plt
-    from cryogrid_pytools import viz, utils
+    from cryogrid_pytools import utils, viz
     from loguru import logger
 
     path_dest = pathlib.Path(fig_dest)
@@ -114,8 +136,7 @@ def make_profile_plots(
             logger.info(f"Creating profile plot for {index}")
 
         ds = open_profiles(fname, deepest_point)
-        ds = ds.set_index(level='depth').rename(level='depth')
-        fig, axs, imgs = viz.plot_profiles(ds.sel(gridcell=index))
+        fig, axs, imgs = viz.plot_profiles(ds.sel(index=index))
 
         fig.tight_layout()
         fig.savefig(sname, transparent=True, bbox_inches="tight", dpi=100)
@@ -161,3 +182,56 @@ def is_empty_profile_image(fname: str) -> bool:
         empty_profile = False
 
     return empty_profile
+
+
+def determine_float_or_int(df, threshold=0.01):
+    """
+    1. get float columns
+    2. get remainder (1)
+    3. get ratio of remainder to value
+    4. if ratio is < 0.1 then it's a int
+    """
+
+    df_floats = df.select_dtypes("float")
+    remainder = df_floats % 1
+    ratio = (remainder / df_floats).median().abs()
+    int_mask = ratio < threshold
+
+    int_cols = df_floats.columns[int_mask]
+
+    df = df.astype({k: "int" for k in int_cols})
+
+    return df
+
+
+def profiles_as_gdf_from_spatial(
+    ds_spatial,
+    x_name="longitude",
+    y_name="latitude",
+    drop_cols=[
+        "cluster_centroid_index",
+        "cluster_centroid_index_mapped",
+        "cluster_number",
+        "x",
+        "y",
+    ],
+):
+    import geopandas as gpd
+
+    df = (
+        ds_spatial.where(
+            lambda x: x["matlab_index"].isin(x["cluster_centroid_index"][1:]), drop=True
+        )
+        .drop_vars(drop_cols)
+        .to_dataframe()
+        .dropna()
+        .reset_index()
+        .assign(geometry=lambda x: gpd.points_from_xy(x[x_name], x[y_name]))
+        .drop(columns=[x_name, y_name] + drop_cols, errors="ignore")
+        .pipe(lambda x: x[(x.nunique() > 1).where(lambda x: x).dropna().index])
+        .pipe(gpd.GeoDataFrame, geometry="geometry", crs=4326)
+        .pipe(determine_float_or_int)
+        .set_index("matlab_index")
+    )
+
+    return df

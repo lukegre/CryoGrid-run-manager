@@ -9,9 +9,9 @@ from loguru import logger
 
 def make_run_folder_structure(
     run_path: Union[str, pathlib.Path],
-    bbox_WSEN: list[float],
     template_dir: Union[str, pathlib.Path],
     config_path_or_url: Union[str, pathlib.Path] = None,
+    bbox_WSEN: list[float] = None,
 ):
     """
     Create the folder structure for a CryoGrid run. This includes the following:
@@ -54,9 +54,10 @@ def make_run_folder_structure(
         f.write(readme_str)
 
     # Create the bbox.txt file
-    bbox_str = ",".join([str(f) for f in bbox_WSEN])
-    with open(run_path / "forcing" / "bbox.txt", "w") as f:
-        f.write(bbox_str)
+    if bbox_WSEN is not None:
+        bbox_str = ",".join([str(f) for f in bbox_WSEN])
+        with open(run_path / "forcing" / "bbox.txt", "w") as f:
+            f.write(bbox_str)
 
     # now for the templating
     assert template_dir.exists(), f"Could not find the templates folder: {template_dir}"
@@ -65,8 +66,11 @@ def make_run_folder_structure(
     fpath_config = get_config_file(run_path, template_dir, config_path_or_url)
 
     copy_template_file(template_dir / "CONSTANTS.xlsx", run_path / "CONSTANTS.xlsx")
-    copy_template_file(template_dir / "slurm_submit.sh", run_path / "slurm_submit.sh")
-
+    render_template(
+        template_dir / "slurm_submit.sh",
+        run_path / "slurm_submit.sh",
+        job_name=run_name,
+    )
     make_run_cryogrid(run_path, template_dir)
 
     return fpath_config
@@ -179,12 +183,36 @@ def copy_template_file(src_fname, dst_fname):
     copyfile(src_fname, dst_fname)
 
 
-def make_run_cryogrid(run_path, template_dir):
-    import os
+def render_template(template_fname, out_name, **kwargs) -> str:
+    """
+    Render a template file with the provided arguments.
 
+    Parameters
+    ----------
+    template_fname : str
+        The name of the template file
+    kwargs : dict
+        The arguments to pass to the template
+
+    Returns
+    -------
+    str
+        The rendered template as a string
+    """
     import jinja2
 
     env = jinja2.Environment()
+    raw_str = open(template_fname).read()
+    rendered_str = env.from_string(raw_str).render(**kwargs)
+
+    with open(out_name, "w") as f:
+        f.write(rendered_str)
+
+    return rendered_str
+
+
+def make_run_cryogrid(run_path, template_dir):
+    import os
 
     template_fname = pathlib.Path(template_dir) / "run_cryogrid.m"
     run_path = pathlib.Path(run_path)
@@ -193,11 +221,28 @@ def make_run_cryogrid(run_path, template_dir):
 
     # get the username of the current user
     username = os.environ.get("USERNAME", "unknown")
+    render_template(
+        template_fname, out_name=out_name, run_name=run_name, username=username
+    )
 
-    raw_str = open(template_fname).read()
-    rendered_str = env.from_string(raw_str).render(run_name=run_name, username=username)
+    return out_name
 
-    with open(out_name, "w") as f:
-        f.write(rendered_str)
+
+def make_slurm_submit(run_path, template_dir):
+    """
+    Create the slurm submit file for the run.
+
+    Parameters
+    ----------
+    run_path : str
+        The path to the run folder
+    template_dir : str
+        The path to the templates folder
+    """
+    template_fname = pathlib.Path(template_dir) / "slurm_submit.sh"
+    run_path = pathlib.Path(run_path)
+    out_name = run_path / "slurm_submit.sh"
+
+    rendered_str = render_template(template_fname, job_name=run_path.name)
 
     return out_name

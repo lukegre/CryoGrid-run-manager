@@ -194,11 +194,11 @@ def calc_surface_index(
     )
 
     mask_values = {
-        0: masked_land_types,
         1: bedrock,
-        2: rock_glaciers,
         3: bare_soil,
         4: vegetated,
+        2: rock_glaciers,
+        0: masked_land_types,
     }
 
     # pre-define the surface classes as ones

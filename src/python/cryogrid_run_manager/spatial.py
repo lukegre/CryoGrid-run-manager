@@ -19,6 +19,7 @@ def open_spatial_data(fname_spatial_mat: str, crs: str) -> xr.Dataset:
     import numpy as np
     import pandas as pd
 
+    print(fname_spatial_mat)
     spatial_dict = cg.read_mat_struct_flat_as_dict(fname_spatial_mat)
 
     cluster_idx = spatial_dict.pop("cluster_idx")
